@@ -18,18 +18,18 @@ Ptr<BackgroundSubtractor>pMOG2;
 cv::vector<cv::Point> pointList;
 
 
-void MyFilledCircle( Mat img, Point center )
-{
- int thickness = -1;
- int lineType = 8;
+// void MyFilledCircle( Mat img, Point center )
+// {
+//  int thickness = -1;
+//  int lineType = 8;
 
- circle( img,
-         center,
-         radius,
-         Scalar( 0, 0, 255 ),
-         thickness,
-         lineType );
-}
+//  circle( img,
+//          center,
+//          radius,
+//          Scalar( 255, 0, 0 ),
+//          thickness,
+//          lineType );
+// }
 void addPoints(){
 	pointList.push_back(Point(200,200));
 	pointList.push_back(Point(210,350));
@@ -55,8 +55,14 @@ int main(){
 		Mat frame;
 		cap>>frame;
 		addPoints();
-		for(int i=0; i<pointList.size(); i++)
-			MyFilledCircle(frame,pointList[i]);
+		if(loopCtr<=loopCountSec){
+			for(int i=0; i<pointList.size(); i++)
+				circle(frame,pointList[i],radius,Scalar(255,0,0),-1,8);
+		}
+		if(loopCtr > loopCountSec && loopCtr <= loopCountSec + avgLoopCount){
+			for(int i=0; i<pointList.size(); i++)
+				circle(frame,pointList[i],radius,Scalar(255,255,255),-1,8);
+		}
 		imshow("image",frame);
 		if(waitKey(30)>=0)
 			break;
