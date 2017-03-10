@@ -14,6 +14,7 @@
 #define hlsFirst 80
 #define hlsSecond 50
 #define hlsThird 50
+#define blurRadius 21
 
 using namespace cv;
 using namespace std;
@@ -85,6 +86,7 @@ Mat filterColor(Mat frame, Scalar hlsavg){
 	Scalar hlsLow = normalise(hlsavg-bound);
 	Scalar hlsHigh= normalise(hlsavg+bound);
 	inRange(frame,hlsLow,hlsHigh,threshold);
+	medianBlur(threshold, threshold, blurRadius);
 	return threshold;
 }
 
