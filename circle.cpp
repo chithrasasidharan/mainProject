@@ -116,6 +116,8 @@ int main(){
            avg = getAvgColor(frame);
            int n = loopCtr - loopCountSec;
            runningAvg = (Scalar)((avg*(n-1)+getAvgColor(frame))/n);
+           for(int i=0; i<pointList.size(); i++)
+                circle(frame,pointList[i],radius,Scalar(255,255,255),-1,8);
             //chec
             
         }
