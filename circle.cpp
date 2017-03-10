@@ -11,6 +11,9 @@
 #define loopCountSec 40
 #define avgLoopCount 50 
 #define radius 100/32
+#define hlsFirst 80
+#define hlsSecond 50
+#define hlsThird 50
 
 using namespace cv;
 using namespace std;
@@ -57,6 +60,35 @@ Scalar getAvgColor(Mat img){
     return avgColour;
 }
 
+
+
+Scalar normalise(Scalar color)
+{
+	Scalar newColor;
+    if(color[0]<0)
+    	newColor[0]=0;
+    if(color[1]<0)
+    	newColor[1]=0;
+    if(color[2]<0)
+    	newColor[2]=0;
+    if(color[0]>180)
+    	newColor[0]=180;
+    if(color[1]>100)
+    	newColor[1]=100;
+    if(color[2]>100)
+    	newColor[2]=100;
+    return newColor;
+}
+Mat filterColor(Mat frame, Scalar hlsavg){
+	Mat threshold;
+	Scalar bound = Scalar(hlsFirst,hlsSecond,hlsThird);
+	Scalar hlsLow = normalise(hlsavg-bound);
+	Scalar hlsHigh= normalise(hlsavg+bound);
+	inRange(frame,hlsLow,hlsHigh,threshold);
+	return threshold;
+}
+
+
 int main(){
     VideoCapture cap(0);
     int loopCtr=0;
@@ -83,12 +115,13 @@ int main(){
            int n = loopCtr - loopCountSec;
            runningAvg = (Scalar)((avg*(n-1)+getAvgColor(frame))/n);
             //chec
-            for(int i=0; i<pointList.size(); i++)
-                circle(frame,pointList[i],radius,Scalar(255,255,255),-1,8);
-            cout<<getAvgColor(frame)<<endl;
-
+            
         }
-
+        if(loopCtr>loopCountSec + avgLoopCount){
+        	Mat th = filterColor(frame,getAvgColor(frame));
+        	imshow("filter",th);
+        	waitKey(30);
+        }
         imshow("image",frame);
         if(waitKey(30)>=0)
             break;
