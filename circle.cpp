@@ -11,9 +11,7 @@
 #define loopCountSec 40
 #define avgLoopCount 50 
 #define radius 100/32
-#define hlsFirst 80
-#define hlsSecond 50
-#define hlsThird 50
+
 #define blurRadius 21
 
 using namespace cv;
@@ -22,7 +20,10 @@ Ptr<BackgroundSubtractor>pMOG2;
 cv::vector<cv::Point> pointList;
 Scalar runningAvg = Scalar(0,0,0);
 
-
+int hlsFirst, hlsSecond,hlsThird;
+int iSliderValue1 = 70;
+int iSliderValue2 = 50;
+int iSliderValue3 = 50;
 // void MyFilledCircle( Mat img, Point center )
 // {
 //  int thickness = -1;
@@ -80,6 +81,13 @@ Scalar normalise(Scalar color)
     	newColor[2]=100;
     return newColor;
 }
+
+static void on_trackbar(int, void*){
+	hlsFirst = iSliderValue1;
+	hlsSecond= iSliderValue2;
+	hlsThird = iSliderValue3;
+}
+
 Mat filterColor(Mat frame, Scalar hlsavg){
 	Mat threshold;
 	Scalar bound = Scalar(hlsFirst,hlsSecond,hlsThird);
@@ -119,9 +127,19 @@ int main(){
            for(int i=0; i<pointList.size(); i++)
                 circle(frame,pointList[i],radius,Scalar(255,255,255),-1,8);
             //chec
+            cout<<runningAvg<<endl;
+
             
         }
+
         if(loopCtr>loopCountSec + avgLoopCount){
+     		createTrackbar("Hue", "filter", &iSliderValue1, 180,on_trackbar);
+     		on_trackbar(hlsFirst,0);
+     		createTrackbar("Lightness", "filter", &iSliderValue2, 180,on_trackbar);
+     		on_trackbar(hlsSecond,0);
+     		createTrackbar("Saturation", "filter", &iSliderValue3, 180,on_trackbar);
+     		on_trackbar(hlsThird,0);
+    	 
         	Mat th = filterColor(frame,getAvgColor(frame));
         	imshow("filter",th);
         	waitKey(30);
