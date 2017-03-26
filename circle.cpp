@@ -17,7 +17,7 @@
 using namespace cv;
 using namespace std;
 Ptr<BackgroundSubtractor>pMOG2;
-cv::vector<cv::Point> pointList;
+vector<Point> pointList;
 Scalar runningAvg = Scalar(0,0,0);
 
 int hlsFirst, hlsSecond,hlsThird;
@@ -94,7 +94,10 @@ Mat filterColor(Mat frame, Scalar hlsavg){
 	Scalar hlsLow = normalise(hlsavg-bound);
 	Scalar hlsHigh= normalise(hlsavg+bound);
 	inRange(frame,hlsLow,hlsHigh,threshold);
+	// bitwise_not(threshold, threshold);
 	medianBlur(threshold, threshold, blurRadius);
+	Mat element = getStructuringElement(MORPH_ELLIPSE,Size(2*5+1, 2*5+1),Point(5, 5));
+     dilate(threshold,threshold, element);
 	return threshold;
 }
 
@@ -102,7 +105,7 @@ Mat filterColor(Mat frame, Scalar hlsavg){
 int main(){
     VideoCapture cap(0);
     int loopCtr=0;
-    pMOG2 = new BackgroundSubtractorMOG2();
+  //  pMOG2 = new BackgroundSubtractorMOG2();
     if(!cap.isOpened())
         return -1;
     while(1){
@@ -135,17 +138,53 @@ int main(){
         if(loopCtr>loopCountSec + avgLoopCount){
      		createTrackbar("Hue", "filter", &iSliderValue1, 180,on_trackbar);
      		on_trackbar(hlsFirst,0);
-     		createTrackbar("Lightness", "filter", &iSliderValue2, 180,on_trackbar);
+     		createTrackbar("Lightness", "filter", &iSliderValue2, 100,on_trackbar);
      		on_trackbar(hlsSecond,0);
-     		createTrackbar("Saturation", "filter", &iSliderValue3, 180,on_trackbar);
+     		createTrackbar("Saturation", "filter", &iSliderValue3, 100,on_trackbar);
      		on_trackbar(hlsThird,0);
     	 
         	Mat th = filterColor(frame,getAvgColor(frame));
         	imshow("filter",th);
         	waitKey(30);
-        }
+        
+      		// Contour detection
+      		vector<vector<Point> > contours;
+	    	vector<Vec4i> hierarchy;
+	     	findContours(th, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
+	      	size_t largestContour = 0;
+	      	for (size_t i = 1; i < contours.size(); i++)
+	      	{
+	          if (contourArea(contours[i]) > contourArea(contours[largestContour]))
+	              largestContour = i;
+	      	}
+	      	drawContours(frame, contours, largestContour, Scalar(0, 0, 255), 1);
+	       	if (!contours.empty())
+      		{
+	          vector<vector<Point> > hull(1);
+	          convexHull(Mat(contours[largestContour]), hull[0], false);
+	          drawContours(frame, hull, 0, Scalar(0, 255, 0), 3);
+	          if (hull[0].size() > 2)
+	          	{
+	              vector<int> hullIndexes;
+	              convexHull(Mat(contours[largestContour]), hullIndexes, true);
+	              vector<Vec4i> convexityDefect;
+	              convexityDefects(Mat(contours[largestContour]), hullIndexes, convexityDefect);
+	              for (size_t i = 0; i < convexityDefect.size(); i++)
+	              	{
+	                  Point p1 = contours[largestContour][convexityDefect[i][0]];
+	                  Point p2 = contours[largestContour][convexityDefect[i][1]];
+	                  Point p3 = contours[largestContour][convexityDefect[i][2]];
+	                  line(frame, p1, p3, Scalar(255, 0, 0), 2);
+	                  line(frame, p3, p2, Scalar(255, 0, 0), 2);
+	              	}
+	          	}
+      		}
+      	}
+        cvtColor(frame, frame, CV_HSV2BGR);
+
         imshow("image",frame);
         if(waitKey(30)>=0)
             break;
     }
+    
 }
