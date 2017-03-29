@@ -12,7 +12,8 @@ using namespace std;
 using namespace cv;
 
 int main(int argc, char *argv[]){
-	int minH = 130, maxH = 160, minS = 10, maxS = 40, minV = 75, maxV = 130;
+	int minH = 0, maxH = 60, minS = 40, maxS = 120, minV = 45, maxV = 135;
+	// int minH = 130, maxH = 160, minS = 10, maxS = 40, minV = 75, maxV = 130;
   	namedWindow("Fingertip Detection");
   	createTrackbar("MinH", "Fingertip Detection", &minH, 180);
   	createTrackbar("MaxH", "Fingertip Detection", &maxH, 180);

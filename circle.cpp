@@ -11,19 +11,22 @@
 #define loopCountSec 40
 #define avgLoopCount 50 
 #define radius 100/32
+#define minSizeForHand 20
+int blurRadius=7;
 
-#define blurRadius 21
 
 using namespace cv;
 using namespace std;
 Ptr<BackgroundSubtractor>pMOG2;
 vector<Point> pointList;
-Scalar runningAvg = Scalar(0,0,0);
+// Scalar runningAvg = Scalar(0,0,0);
+std::vector<Scalar> runningAvg;
 
 int hlsFirst, hlsSecond,hlsThird;
 int iSliderValue1 = 70;
 int iSliderValue2 = 50;
 int iSliderValue3 = 50;
+int iSliderValue4 = 7;
 // void MyFilledCircle( Mat img, Point center )
 // {
 //  int thickness = -1;
@@ -36,33 +39,48 @@ int iSliderValue3 = 50;
 //          thickness,
 //          lineType );
 // }
-void addPoints(){
-    pointList.push_back(Point(200,200));
-    pointList.push_back(Point(210,350));
-    pointList.push_back(Point(240,160));
-    pointList.push_back(Point(240,370));
-    pointList.push_back(Point(290,135));
-    pointList.push_back(Point(340,175));
-    pointList.push_back(Point(280,385));
-    pointList.push_back(Point(320,365));
-        pointList.push_back(Point(200,275));
-    pointList.push_back(Point(350,275));
+void addPoints(Mat frame){
+    // to quickly move whole figure
+    int xOffset = frame.cols/4;
+    int yOffset = 0;
+    // points vaguely in the shape of a hand
+    pointList.push_back(Point(frame.cols/3 + xOffset, frame.rows/6 + yOffset));
+    pointList.push_back(Point(frame.cols/3.5 + xOffset, frame.rows/6 + yOffset));
+    pointList.push_back(Point(frame.cols/2.5 + xOffset, frame.rows/6 + yOffset));
+    pointList.push_back(Point(frame.cols/4 + xOffset, frame.rows/2 + yOffset));
+    pointList.push_back(Point(frame.cols/3 + xOffset, frame.rows/1.5 + yOffset));
+    // pointList.push_back(Point(frame.cols/2 + xOffset, frame.rows/2 + yOffset));
+    pointList.push_back(Point(frame.cols/2.5 + xOffset, frame.rows/2.5 + yOffset));
+    // pointList.push_back(Point(frame.cols/2 + xOffset, frame.rows/1.5 + yOffset));
+    pointList.push_back(Point(frame.cols/2.5 + xOffset, frame.rows/1.8 + yOffset));
 }
 
-Scalar getAvgColor(Mat img){
-    Scalar colour, avgColour;
+vector<Scalar> getAvgColor(Mat img){
+    Scalar colour;
+    vector<Scalar>avgColour;
     int n=0;
     for(auto iter=pointList.begin(); iter!=pointList.end(); iter++){
         Rect r(iter->x-radius, iter->y-radius, 2*radius, 2*radius);
         colour = mean(img(r));
-        avgColour = avgColour+colour;
-        n++;
+        avgColour.push_back(colour);
     }
-    avgColour/=n;
     return avgColour;
 }
 
-
+bool isHand(std::vector<Point> contour)
+{
+  bool isHand=true;
+  Rect boundingRectangle = boundingRect(contour);
+  int h = boundingRectangle.height;
+  int w = boundingRectangle.width;
+  if(h==0 || w==0)
+    isHand=false;
+  else if(w/h>4 || h/w>4)
+    isHand=false;
+  else if(h<minSizeForHand || w<minSizeForHand)
+    isHand=false;
+  return isHand;
+}
 
 Scalar normalise(Scalar color)
 {
@@ -85,19 +103,37 @@ Scalar normalise(Scalar color)
 static void on_trackbar(int, void*){
 	hlsFirst = iSliderValue1;
 	hlsSecond= iSliderValue2;
-	hlsThird = iSliderValue3;
+  hlsThird = iSliderValue3;
+  if(iSliderValue4%2!=0)
+    blurRadius = iSliderValue4;
+  else
+  	blurRadius = iSliderValue4+1;
+
 }
 
-Mat filterColor(Mat frame, Scalar hlsavg){
-	Mat threshold;
-	Scalar bound = Scalar(hlsFirst,hlsSecond,hlsThird);
-	Scalar hlsLow = normalise(hlsavg-bound);
-	Scalar hlsHigh= normalise(hlsavg+bound);
-	inRange(frame,hlsLow,hlsHigh,threshold);
+Mat filterColor(Mat frame, vector<Scalar> hlsavgs){
+  Mat threshold;
+  bool first = true;
+  for(int i=0; i<hlsavgs.size();++i)
+  {
+    Mat tempThreshold;
+    Scalar hlsavg = hlsavgs[i];
+  	Scalar bound = Scalar(hlsFirst,hlsSecond,hlsThird);
+    Scalar hlsLow = normalise(hlsavg-bound);
+  	Scalar hlsHigh= normalise(hlsavg+bound);
+  	inRange(frame,hlsLow,hlsHigh,tempThreshold);
+    if(first){
+      threshold=tempThreshold;
+      first=false;
+    }
+    else
+      threshold|=tempThreshold;
+
+  }
 	// bitwise_not(threshold, threshold);
 	medianBlur(threshold, threshold, blurRadius);
-	Mat element = getStructuringElement(MORPH_ELLIPSE,Size(2*5+1, 2*5+1),Point(5, 5));
-     dilate(threshold,threshold, element);
+	// Mat element = getStructuringElement(MORPH_ELLIPSE,Size(2*5+1, 2*5+1),Point(5, 5));
+  // dilate(threshold,threshold, element);
 	return threshold;
 }
 
@@ -112,7 +148,10 @@ int main(){
         loopCtr++;
         Mat frame;
         cap>>frame;
-        addPoints();
+        pyrDown(frame,frame);
+        // pyrDown(frame,frame);
+        flip(frame,frame,1);
+        addPoints(frame);
 
         cvtColor(frame, frame, CV_BGR2HSV);
 
@@ -124,13 +163,9 @@ int main(){
         if(loopCtr > loopCountSec && loopCtr <= loopCountSec + avgLoopCount){
             // cout<<getAvgColor(frame)<<endl;
            Scalar avg;
-           avg = getAvgColor(frame);
-           int n = loopCtr - loopCountSec;
-           runningAvg = (Scalar)((avg*(n-1)+getAvgColor(frame))/n);
+           runningAvg = getAvgColor(frame);
            for(int i=0; i<pointList.size(); i++)
                 circle(frame,pointList[i],radius,Scalar(255,255,255),-1,8);
-            //chec
-            cout<<runningAvg<<endl;
 
             
         }
@@ -142,8 +177,10 @@ int main(){
      		on_trackbar(hlsSecond,0);
      		createTrackbar("Saturation", "filter", &iSliderValue3, 100,on_trackbar);
      		on_trackbar(hlsThird,0);
-    	 
-        	Mat th = filterColor(frame,getAvgColor(frame));
+    	  createTrackbar("Blur", "filter", &iSliderValue4, 100,on_trackbar);
+        on_trackbar(blurRadius,0);
+        
+        	Mat th = filterColor(frame,runningAvg);
         	imshow("filter",th);
         	waitKey(30);
         
@@ -151,29 +188,34 @@ int main(){
       		vector<vector<Point> > contours;
 	    	vector<Vec4i> hierarchy;
 	     	findContours(th, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
-	      	size_t largestContour = 0;
+	      	size_t bestContour = 0;
 	      	for (size_t i = 1; i < contours.size(); i++)
 	      	{
-	          if (contourArea(contours[i]) > contourArea(contours[largestContour]))
-	              largestContour = i;
+            if(isHand(contours[i]))
+            {
+              bestContour = i;
+              break;
+            }
+	          // if (contourArea(contours[i]) > contourArea(contours[bestContour]))
+	          //     bestContour = i;
 	      	}
-	      	drawContours(frame, contours, largestContour, Scalar(0, 0, 255), 1);
+	      	drawContours(frame, contours, bestContour, Scalar(0, 0, 255), 1);
 	       	if (!contours.empty())
       		{
 	          vector<vector<Point> > hull(1);
-	          convexHull(Mat(contours[largestContour]), hull[0], false);
+	          convexHull(Mat(contours[bestContour]), hull[0], false);
 	          drawContours(frame, hull, 0, Scalar(0, 255, 0), 3);
 	          if (hull[0].size() > 2)
 	          	{
 	              vector<int> hullIndexes;
-	              convexHull(Mat(contours[largestContour]), hullIndexes, true);
+	              convexHull(Mat(contours[bestContour]), hullIndexes, true);
 	              vector<Vec4i> convexityDefect;
-	              convexityDefects(Mat(contours[largestContour]), hullIndexes, convexityDefect);
+	              convexityDefects(Mat(contours[bestContour]), hullIndexes, convexityDefect);
 	              for (size_t i = 0; i < convexityDefect.size(); i++)
 	              	{
-	                  Point p1 = contours[largestContour][convexityDefect[i][0]];
-	                  Point p2 = contours[largestContour][convexityDefect[i][1]];
-	                  Point p3 = contours[largestContour][convexityDefect[i][2]];
+	                  Point p1 = contours[bestContour][convexityDefect[i][0]];
+	                  Point p2 = contours[bestContour][convexityDefect[i][1]];
+	                  Point p3 = contours[bestContour][convexityDefect[i][2]];
 	                  line(frame, p1, p3, Scalar(255, 0, 0), 2);
 	                  line(frame, p3, p2, Scalar(255, 0, 0), 2);
 	              	}
