@@ -69,13 +69,14 @@ vector<Scalar> getAvgColor(Mat img){
          h.push_back(colour[0]);
          l.push_back(colour[1]);
          s.push_back(colour[2]);
-         avgColour.push_back(colour);
-     }
-     int avg[3];
-     avg[0] = getMedian(h);
-     avg[1] = getMedian(l);
-     avg[2] = getMedian(s);
+         int avg[3];
+    	 avg[0] = getMedian(h);
+    	 avg[1] = getMedian(l);
+    	 avg[2] = getMedian(s);
 
+         avgColour.push_back(Scalar(avg[0],avg[1],avg[2]));
+     }
+     
      return avgColour;
  }
 
