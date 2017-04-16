@@ -1,2 +1,3 @@
-g++ -o circle circle.cpp  `pkg-config --cflags --libs opencv` 
+all:
+	g++ -o circle circle.cpp  `pkg-config --cflags --libs opencv` 
 
