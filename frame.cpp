@@ -59,7 +59,6 @@ void Frame::makeThreshold(){
 	}
     thresholdExists=true;
 	medianBlur(threshold, threshold,blurRadius); 
-    imshow("threshs", threshold);
 }
 
 void Frame::read(){
@@ -80,10 +79,17 @@ void Frame::show(){
     
     if(thresholdExists)
     {
-        // int x = src.cols - threshold.cols;
-        // int y = transient.rows;
-        // threshold.copyTo(src(Rect(x,y,threshold.cols, threshold.rows)));
-        imshow("thresh", threshold);
+        // The threshold matrix is somehow layered, or has channels. So all channels are merged to get single matrix
+        Mat result;
+        vector<Mat> channels;
+        for(int i=0;i<3;i++)
+            channels.push_back(threshold);
+        merge(channels,result);
+
+        int x = src.cols - result.cols;
+        int y = transient.rows;
+        result.copyTo(src(Rect(x,y,result.cols, result.rows)));
+        // imshow("thresh", result);
     }
 
 
