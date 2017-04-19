@@ -4,9 +4,14 @@
 #include "opencv2/imgproc/types_c.h"
 #include "opencv2/highgui/highgui_c.h"
 #include <opencv2/opencv.hpp>
+#include <main.hpp>
 using namespace std;
 using namespace cv;
 class Frame{
+// normalize colors to be within 0 to 255
+void normalizeColors();
+// If threshold exists, to display it. 
+bool thresholdExists;
 public:
     Frame();
     Frame(Mat);
@@ -18,6 +23,14 @@ public:
     Mat src;
     // The matrix where all the changes will occur
     Mat transient;
+    // The matrix black and white matrix threshold
+    Mat threshold;
+    // The average, lower bound and upper bound color found after average function
+    int average[nSamples][3];
+    int lower;
+    int upper;
+    // make the black and white threshold image
+    void makeThreshold();
     // Capture object to get video from
     VideoCapture cap;
     Point tl,br;
