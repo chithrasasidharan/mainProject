@@ -1,3 +1,0 @@
-all:
-	g++ -o circle circle.cpp  `pkg-config --cflags --libs opencv` 
-
