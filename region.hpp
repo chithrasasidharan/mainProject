@@ -1,5 +1,5 @@
-#ifndef ROI 
-#define ROI
+#ifndef _ROI_ 
+#define _ROI_
 
 #include <opencv2/imgproc/imgproc.hpp>
 #include<opencv2/opencv.hpp>
