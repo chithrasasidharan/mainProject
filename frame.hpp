@@ -10,9 +10,15 @@ class Frame{
 public:
     Frame();
     Frame(Mat);
+    // read image
     void read();
+    // Show image
     void show();
+    // Initially read matrix
     Mat src;
+    // The matrix where all the changes will occur
+    Mat transient;
+    // Capture object to get video from
     VideoCapture cap;
 };
 #endif
