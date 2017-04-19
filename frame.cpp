@@ -16,9 +16,18 @@ Frame::Frame(Mat s){
 void Frame::read(){
     cap>>src;
     flip(src,src,1);
+    // Scale down
+    pyrDown(src,transient);
+    pyrDown(transient,transient);
+    // change color
+    cvtColor(transient, transient, CV_BGR2HLS);
+		
 }
 void Frame::show(){
-    imshow("window", src);
+    int x = src.cols - transient.cols;
+    int y = 0;
+    transient.copyTo(src(Rect(x,y,transient.cols, transient.rows)));
+    imshow("src", src);
     if(waitKey(30)>=0)
         exit(0);
 }
