@@ -12,13 +12,13 @@
 
 #define originalToColor CV_BGR2HLS
 #define colorToOriginal CV_HLS2BGR
-#define NSAMPLES 7
+#define nSamples 7
 #define windowName "src"
 #define PI 3.14159
 
 // Variables for tuning
 #define waitForCoverIterations 50
-#define handReadIterations 30
+#define averageIterations 30
 
 
 #endif
