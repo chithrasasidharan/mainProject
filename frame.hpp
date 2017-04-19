@@ -20,5 +20,6 @@ public:
     Mat transient;
     // Capture object to get video from
     VideoCapture cap;
+    Point tl,br;
 };
 #endif
