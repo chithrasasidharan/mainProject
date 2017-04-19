@@ -27,8 +27,28 @@ vector<Region> initRegions(Frame f)
 }
 
 void printText(Mat src, string text){
-	int fontFace = FONT_HERSHEY_PLAIN;
 	putText(src,text,Point(src.cols/2, src.rows*9/10),fontFace, 1.2f,Scalar(200,0,0),2);
+}
+
+void initWindows(Frame f){
+
+    namedWindow("trackbars",CV_WINDOW_KEEPRATIO);
+    namedWindow(windowName,CV_WINDOW_FULLSCREEN);
+
+	for(int i=0;i<nSamples;i++){
+		f.lower[i][0]=12;
+		f.upper[i][0]=7;
+		f.lower[i][1]=30;
+		f.upper[i][1]=40;
+		f.lower[i][2]=80;
+		f.upper[i][2]=80;
+	}
+	createTrackbar("lower1","trackbars",&f.lower[0][0],255);
+	createTrackbar("upper1","trackbars",&f.upper[0][0],255);
+	createTrackbar("lower2","trackbars",&f.lower[0][1],255);
+	createTrackbar("upper2","trackbars",&f.upper[0][1],255);
+	createTrackbar("lower3","trackbars",&f.lower[0][2],255);
+	createTrackbar("upper3","trackbars",&f.upper[0][2],255);
 }
 
 void waitForPalmCover(vector<Region> regions){
@@ -47,22 +67,21 @@ void waitForPalmCover(vector<Region> regions){
 
 void takeAverage(vector<Region> regions)
 {
-    int average[nSamples][3];
     for(int i=0; i<averageIterations; ++i)
     {
         f.read();
         cvtColor(f.src, f.src, originalToColor);
-		string imgText = string("Finding average color of hand");
-		printText(f.src,imgText);	
-        for(int j=0;j<nSamples; ++j)
+       for(int j=0;j<nSamples; ++j)
         {
-            regions[j].getAverage(f.src, average[j]);
+            regions[j].getAverage(f.src, f.average[j]);
             regions[j].draw(f.src);
             // Testing cout output to see if average works
-            // cout<<average[j][0]<<" "<<average[j][1]<<" "<<average[j][2]<<" "<<endl;
+            cout<<f.average[j][0]<<" "<<f.average[j][1]<<" "<<f.average[j][2]<<" "<<endl;
         }
-        // cout<<endl;
+        cout<<endl;
         cvtColor(f.src, f.src, colorToOriginal);
+		string imgText = string("Finding average color of hand");
+		printText(f.src,imgText);	
         f.show();
     }
 }
@@ -70,14 +89,14 @@ void takeAverage(vector<Region> regions)
 int main()
 {
     f.read();
-    f.show();   
-    namedWindow(windowName, CV_WINDOW_KEEPRATIO);
+    // Hand h;
     vector<Region> regions = initRegions(f);
+    initWindows(f);
     waitForPalmCover(regions);
     takeAverage(regions);
     while(true){
         f.read();
-
+        f.makeThreshold();
         f.show();
     }
     return 0;

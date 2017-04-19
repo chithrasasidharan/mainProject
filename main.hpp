@@ -12,6 +12,8 @@
 
 #define originalToColor CV_BGR2HLS
 #define colorToOriginal CV_HLS2BGR
+#define	fontFace FONT_HERSHEY_PLAIN
+#define	blurRadius 7
 #define nSamples 7
 #define windowName "src"
 #define PI 3.14159

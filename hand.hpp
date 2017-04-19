@@ -16,7 +16,8 @@ class Hand{
         Frame f;
         // no of the frame where hand was read
         int frameNo;
+        int noOfFingers;
         Hand();
-}
+};
 
 #endif
