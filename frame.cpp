@@ -9,32 +9,36 @@ using namespace cv;
 
 Frame::Frame(){
     cap=VideoCapture(0);
+    lower = Scalar(13, 30, 80);
+    upper = Scalar(7, 40, 80);
 }
 Frame::Frame(Mat s){
     src = s;
     cap=VideoCapture(0);
+    lower = Scalar(13, 30, 80);
+    upper = Scalar(7, 40, 80);
 }
 
-void Frame::normalizeColors(){
-    // TODO to get from trackbar
+Scalar Frame::normalizeColors(int i, bool isLower){	
+    Scalar color;
+    if(isLower)
+        color = Scalar(average[i][0],average[i][1],average[i][2]) - lower;
+    else
+        color = Scalar(average[i][0],average[i][1],average[i][2]) + upper;
 
-    // normalize all boundaries so that 
-	// threshold is whithin 0-255
-	for(int i=0;i<nSamples;i++){
-		if((average[i][0]-lower) <0){
-			lower = average[i][0] ;
-		}if((average[i][1]-lower) <0){
-			lower = average[i][1] ;
-		}if((average[i][2]-lower) <0){
-			lower = average[i][2] ;
-		}if((average[i][0]+upper[i][0]) >255){ 
-			upper[i][0] = 255-average[i][0] ;
-		}if((average[i][1]+upper[i][1]) >255){
-			upper[i][1] = 255-average[i][1] ;
-		}if((average[i][2]+upper[i][2]) >255){
-			upper[i][2] = 255-average[i][2] ;
-		}
-	}
+    if(color[0]<0)
+        color[0]=0;
+    if(color[0]>255)
+        color[0]=255;
+    if(color[1]<0)
+        color[1]=0;
+    if(color[1]>255)
+        color[1]=255;
+    if(color[2]<0)
+        color[2]=0;
+    if(color[2]>255)
+        color[2]=255;
+    return color;
 }
 
 void Frame::makeThreshold(){
@@ -42,9 +46,8 @@ void Frame::makeThreshold(){
 	Scalar upperBound;
     vector<Mat> bwList;
 	for(int i=0;i<nSamples;i++){
-		normalizeColors();
-		lowerBound=Scalar(average[i][0] - lower[i][0] , average[i][1] - lower[i][1], average[i][2] - lower[i][2] );
-		upperBound=Scalar(average[i][0] + upper[i][0] , average[i][1] + upper[i][1], average[i][2] + upper[i][2] );
+        lowerBound = normalizeColors(i, true);
+        upperBound = normalizeColors(i, false);
         bwList.push_back(Mat(transient.rows,transient.cols,CV_8U));			
 		inRange(transient,lowerBound,upperBound,bwList[i]);	
         if(i==0){

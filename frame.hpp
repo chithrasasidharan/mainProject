@@ -9,7 +9,7 @@ using namespace std;
 using namespace cv;
 class Frame{
 // normalize colors to be within 0 to 255
-void normalizeColors();
+Scalar normalizeColors(int, bool);
 // If threshold exists, to display it. 
 bool thresholdExists;
 public:
@@ -27,8 +27,8 @@ public:
     Mat threshold;
     // The average, lower bound and upper bound color found after average function
     int average[nSamples][3];
-    int lower;
-    int upper;
+    Scalar lower;
+    Scalar upper;
     // make the black and white threshold image
     void makeThreshold();
     // Capture object to get video from

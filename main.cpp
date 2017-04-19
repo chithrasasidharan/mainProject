@@ -35,20 +35,12 @@ void initWindows(Frame f){
     namedWindow("trackbars",CV_WINDOW_KEEPRATIO);
     namedWindow(windowName,CV_WINDOW_FULLSCREEN);
 
-	for(int i=0;i<nSamples;i++){
-		f.lower[i][0]=12;
-		f.upper[i][0]=7;
-		f.lower[i][1]=30;
-		f.upper[i][1]=40;
-		f.lower[i][2]=80;
-		f.upper[i][2]=80;
-	}
-	createTrackbar("lower1","trackbars",&f.lower[0][0],255);
-	createTrackbar("upper1","trackbars",&f.upper[0][0],255);
-	createTrackbar("lower2","trackbars",&f.lower[0][1],255);
-	createTrackbar("upper2","trackbars",&f.upper[0][1],255);
-	createTrackbar("lower3","trackbars",&f.lower[0][2],255);
-	createTrackbar("upper3","trackbars",&f.upper[0][2],255);
+	// createTrackbar("lower1","trackbars",&f.lower[0],255);
+	// createTrackbar("upper1","trackbars",&f.upper[0],255);
+	// createTrackbar("lower2","trackbars",&f.lower[1],255);
+	// createTrackbar("upper2","trackbars",&f.upper[1],255);
+	// createTrackbar("lower3","trackbars",&f.lower[2],255);
+	// createTrackbar("upper3","trackbars",&f.upper[2],255);
 }
 
 void waitForPalmCover(vector<Region> regions){
