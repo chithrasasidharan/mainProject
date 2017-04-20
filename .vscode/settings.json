@@ -9,6 +9,8 @@
         "ostream": "cpp",
         "streambuf": "cpp",
         "tuple": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "initializer_list": "cpp",
+        "utility": "cpp"
     }
 }
