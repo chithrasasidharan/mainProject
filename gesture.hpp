@@ -1,5 +1,5 @@
-#ifndef _HAND_
-#define _HAND_ 
+#ifndef _GESTURE_
+#define _GESTURE_ 
 
 #include <opencv2/imgproc/imgproc.hpp>
 #include<opencv2/opencv.hpp>
@@ -10,7 +10,7 @@
 using namespace cv;
 using namespace std;
 
-class Hand{
+class Gesture{
     void setBiggestContour();
     void initVectors();
     void eliminateDefects();
@@ -33,9 +33,11 @@ class Hand{
         int bigIndex;
         Rect boundingRectangle;
         // constructor
-        Hand();
+        Gesture();
         // make contours from frame
-        void makeContours(Frame);
+        void initFrame(Frame);
+        // checks if it is a hand and prints accordingly
+        void checkHand();
 };
 
 #endif

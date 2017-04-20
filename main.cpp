@@ -1,7 +1,7 @@
 #include <iostream>
 #include <frame.hpp>
 #include <main.hpp>
-#include <hand.hpp>
+#include <gesture.hpp>
 #include <region.hpp>
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/imgproc/types_c.h"
@@ -81,7 +81,7 @@ void takeAverage(vector<Region> regions)
 int main()
 {
     f.read();
-    Hand h;
+    Gesture g;
     vector<Region> regions = initRegions(f);
     initWindows(f);
     waitForPalmCover(regions);
@@ -89,7 +89,8 @@ int main()
     while(true){
         f.read();
         f.makeThreshold();
-        h.makeContours(f);
+        g.initFrame(f);
+        g.checkHand();
         f.show();
     }
     return 0;
