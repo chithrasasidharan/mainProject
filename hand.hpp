@@ -14,6 +14,7 @@ class Hand{
     void setBiggestContour();
     void initVectors();
     void eliminateDefects();
+    void removeRedundantEndPoints(vector<Vec4i>);
     float getAngle(Point, Point, Point);
     float distanceP2P(Point, Point);
     public:
