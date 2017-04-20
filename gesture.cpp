@@ -1,4 +1,4 @@
-#include "hand.hpp"
+#include "gesture.hpp"
 #include "main.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
 #include<opencv2/opencv.hpp>
@@ -11,12 +11,12 @@
 using namespace cv;
 using namespace std;
 
-Hand::Hand(){
+Gesture::Gesture(){
 	frameNo=0;
 	noOfFingers=0;
 }
 
-void Hand::setBiggestContour()
+void Gesture::setBiggestContour()
 {
 	bigIndex = -1;
     int sizeOfBiggestContour = 0;
@@ -28,19 +28,19 @@ void Hand::setBiggestContour()
     }
 }
 
-void Hand::initVectors()
+void Gesture::initVectors()
 {
 	hullI=vector<vector<int> >(contours.size());
 	hullP=vector<vector<Point> >(contours.size());
 	defects=vector<vector<Vec4i> > (contours.size());
 }
 
-float Hand::distanceP2P(Point a, Point b){
+float Gesture::distanceP2P(Point a, Point b){
 	float d= sqrt(fabs( pow(a.x-b.x,2) + pow(a.y-b.y,2) )) ;  
 	return d;
 }
 
-float Hand::getAngle(Point s, Point f, Point e){
+float Gesture::getAngle(Point s, Point f, Point e){
 	float l1 = distanceP2P(f,s);
 	float l2 = distanceP2P(f,e);
 	float dot=(s.x-f.x)*(e.x-f.x) + (s.y-f.y)*(e.y-f.y);
@@ -49,7 +49,7 @@ float Hand::getAngle(Point s, Point f, Point e){
 	return angle;
 }
 
-void Hand::removeRedundantEndPoints(vector<Vec4i> newDefects){
+void Gesture::removeRedundantEndPoints(vector<Vec4i> newDefects){
 	Vec4i temp;
 	float avgX, avgY;
 	float tolerance=boundingRectangle.width/6;
@@ -71,7 +71,7 @@ void Hand::removeRedundantEndPoints(vector<Vec4i> newDefects){
 	}
 }
 
-void Hand::eliminateDefects()
+void Gesture::eliminateDefects()
 {
 	int tolerance =  boundingRectangle.height/5;
 	float angleTol=95;
@@ -95,10 +95,11 @@ void Hand::eliminateDefects()
 	removeRedundantEndPoints(defects[bigIndex]);
 }
 
-void Hand::makeContours(Frame frame)
+// make contours with current frame
+void Gesture::initFrame(Frame frame)
 {
 	f = frame;	
-	findContours(f.contours, contours, CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
+	findContours(f.contours, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
 	initVectors();
 	setBiggestContour();
 	if(bigIndex!=-1)
@@ -113,4 +114,10 @@ void Hand::makeContours(Frame frame)
 			drawContours(f.src, hullP, bigIndex, Scalar(200,0,0), 2, 8, vector<Vec4i>(), 0, Point());
 		}		
 	}
+}
+
+// check if hand exits, if so init hand with it
+void Gesture::checkHand()
+{
+	
 }
