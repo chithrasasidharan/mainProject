@@ -133,13 +133,13 @@ void Gesture::print()
 void Gesture::checkHandExists()
 {
 	hasHand=true;
-	if(fingerTips.size() > 5 ){
+	/*if(fingerTips.size() > 5 ){
 		hasHand=false;
-	}else if(boundingRectangle.height==0 || boundingRectangle.width == 0){
+	}else*/ if(boundingRectangle.height==0 || boundingRectangle.width == 0){
 		hasHand=false;
 	}else if(boundingRectangle.height/boundingRectangle.width > 4 || boundingRectangle.width/boundingRectangle.height >4){
 		hasHand=false;	
-	}else if(bRect.x<20){
+	}else if(boundingRectangle.x<20){
 		hasHand=false;	
 	}	
 }

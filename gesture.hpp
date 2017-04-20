@@ -14,6 +14,8 @@ class Gesture{
     void setBiggestContour();
     void initVectors();
     void eliminateDefects();
+    void checkHandExists();
+    void print();
     void removeRedundantEndPoints(vector<Vec4i>);
     //angle between 3 points
     float getAngle(Point, Point, Point);
