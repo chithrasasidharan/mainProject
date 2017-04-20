@@ -13,6 +13,9 @@ using namespace std;
 class Hand{
     void setBiggestContour();
     void initVectors();
+    void eliminateDefects();
+    float getAngle(Point, Point, Point);
+    float distanceP2P(Point, Point);
     public:
         Frame f;
         // no of the frame where hand was read

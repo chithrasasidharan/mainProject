@@ -92,14 +92,6 @@ void Frame::show(){
         y+= transient.rows;
         result.copyTo(src(Rect(x,y,result.cols, result.rows)));
 
-        // vector<Mat> channels2;
-        // for(int i=0;i<3;i++)
-        //     channels2.push_back(contours);
-        // merge(channels2,result);
-
-        // x-=transient.cols;
-        // y+= transient.rows;
-        // result.copyTo(src(Rect(x,y,result.cols, result.rows)));
     }
 
 
