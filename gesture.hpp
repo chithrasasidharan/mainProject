@@ -15,8 +15,12 @@ class Gesture{
     void initVectors();
     void eliminateDefects();
     void removeRedundantEndPoints(vector<Vec4i>);
+    //angle between 3 points
     float getAngle(Point, Point, Point);
+    //distance between two points
     float distanceP2P(Point, Point);
+    // checks if it is a hand and prints accordingly
+    void checkHand();
     public:
         Frame f;
         // no of the frame where hand was read
@@ -32,12 +36,12 @@ class Gesture{
         // helpers
         int bigIndex;
         Rect boundingRectangle;
+        // to know if hand exists in frame
+        bool hasHand;
         // constructor
         Gesture();
         // make contours from frame
         void initFrame(Frame);
-        // checks if it is a hand and prints accordingly
-        void checkHand();
 };
 
 #endif

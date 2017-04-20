@@ -90,7 +90,6 @@ int main()
         f.read();
         f.makeThreshold();
         g.initFrame(f);
-        g.checkHand();
         f.show();
     }
     return 0;
