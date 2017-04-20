@@ -4,7 +4,6 @@
 #include "opencv2/imgproc/types_c.h"
 #include "opencv2/highgui/highgui_c.h"
 #include <opencv2/opencv.hpp>
-#include <main.hpp>
 using namespace std;
 using namespace cv;
 class Frame{
@@ -26,7 +25,7 @@ public:
     // The matrix black and white matrix threshold
     Mat threshold;
     // The average, lower bound and upper bound color found after average function
-    int average[nSamples][3];
+    int average[7][3];
     Scalar lower;
     Scalar upper;
     // make the black and white threshold image

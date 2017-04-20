@@ -5,7 +5,6 @@
 #include<opencv2/opencv.hpp>
 #include <vector>
 #include <string>
-#include "main.hpp"
 #include "frame.hpp"
 
 using namespace cv;
