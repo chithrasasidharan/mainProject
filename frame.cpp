@@ -58,6 +58,9 @@ void Frame::makeThreshold(){
         }
 	}
     thresholdExists=true;
+    threshold.copyTo(contours);
+    pyrUp(contours, contours);
+    pyrUp(contours, contours);
 	medianBlur(threshold, threshold,blurRadius); 
 }
 
@@ -86,10 +89,17 @@ void Frame::show(){
             channels.push_back(threshold);
         merge(channels,result);
 
-        int x = src.cols - result.cols;
-        int y = transient.rows;
+        y+= transient.rows;
         result.copyTo(src(Rect(x,y,result.cols, result.rows)));
-        // imshow("thresh", result);
+
+        // vector<Mat> channels2;
+        // for(int i=0;i<3;i++)
+        //     channels2.push_back(contours);
+        // merge(channels2,result);
+
+        // x-=transient.cols;
+        // y+= transient.rows;
+        // result.copyTo(src(Rect(x,y,result.cols, result.rows)));
     }
 
 
