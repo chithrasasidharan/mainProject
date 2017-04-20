@@ -3,6 +3,12 @@
         "string": "cpp",
         "vector": "cpp",
         "array": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "*.tcc": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "streambuf": "cpp",
+        "tuple": "cpp",
+        "valarray": "cpp"
     }
 }
