@@ -24,6 +24,8 @@ public:
     Mat transient;
     // The matrix black and white matrix threshold
     Mat threshold;
+    // do stuff with contours
+    Mat contours;
     // The average, lower bound and upper bound color found after average function
     int average[7][3];
     Scalar lower;

@@ -81,7 +81,7 @@ void takeAverage(vector<Region> regions)
 int main()
 {
     f.read();
-    // Hand h;
+    Hand h;
     vector<Region> regions = initRegions(f);
     initWindows(f);
     waitForPalmCover(regions);
@@ -89,6 +89,7 @@ int main()
     while(true){
         f.read();
         f.makeThreshold();
+        h.makeContours(f);
         f.show();
     }
     return 0;

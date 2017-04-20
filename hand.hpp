@@ -11,12 +11,27 @@ using namespace cv;
 using namespace std;
 
 class Hand{
+    void setBiggestContour();
+    void initVectors();
     public:
         Frame f;
         // no of the frame where hand was read
         int frameNo;
         int noOfFingers;
+
+        // contours
+        vector<vector<Point> > contours;
+        vector<vector<int> > hullI;
+        vector<vector<Point> > hullP;
+        vector<vector<Vec4i> > defects;
+
+        // helpers
+        int bigIndex;
+        Rect boundingRectangle;
+        // constructor
         Hand();
+        // make contours from frame
+        void makeContours(Frame);
 };
 
 #endif
