@@ -111,13 +111,35 @@ void Gesture::initFrame(Frame frame)
 		if(handContour.size()>3 ){
 			convexityDefects(handContour,hullI[bigIndex],defects[bigIndex]);
 			eliminateDefects();
-			drawContours(f.src, hullP, bigIndex, Scalar(200,0,0), 2, 8, vector<Vec4i>(), 0, Point());
+
+			checkHandExists();
+			print();
+			if(hasHand)
+			{
+				// TODO make hand object
+			}
 		}		
 	}
 }
 
-// check if hand exits, if so init hand with it
-void Gesture::checkHand()
+// print info regarding hand
+void Gesture::print()
 {
-	
+	// TODO do print function
+}
+
+// check if hand exists, if so init hand with it
+// if more than 5 fingers, or h or w is 0, or aspect ratio more than 4 or less than 20 pixels, then not hand
+void Gesture::checkHandExists()
+{
+	hasHand=true;
+	if(fingerTips.size() > 5 ){
+		hasHand=false;
+	}else if(boundingRectangle.height==0 || boundingRectangle.width == 0){
+		hasHand=false;
+	}else if(boundingRectangle.height/boundingRectangle.width > 4 || boundingRectangle.width/boundingRectangle.height >4){
+		hasHand=false;	
+	}else if(bRect.x<20){
+		hasHand=false;	
+	}	
 }
