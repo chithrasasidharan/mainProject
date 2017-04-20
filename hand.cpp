@@ -49,6 +49,28 @@ float Hand::getAngle(Point s, Point f, Point e){
 	return angle;
 }
 
+void Hand::removeRedundantEndPoints(vector<Vec4i> newDefects){
+	Vec4i temp;
+	float avgX, avgY;
+	float tolerance=boundingRectangle.width/6;
+	int startidx, endidx, faridx;
+	int startidx2, endidx2;
+	for(int i=0;i<newDefects.size();i++){
+		for(int j=i;j<newDefects.size();j++){
+	    	startidx=newDefects[i][0]; Point ptStart(contours[bigIndex][startidx] );
+	   		endidx=newDefects[i][1]; Point ptEnd(contours[bigIndex][endidx] );
+	    	startidx2=newDefects[j][0]; Point ptStart2(contours[bigIndex][startidx2] );
+	   		endidx2=newDefects[j][1]; Point ptEnd2(contours[bigIndex][endidx2] );
+			if(distanceP2P(ptStart,ptEnd2) < tolerance ){
+				contours[bigIndex][startidx]=ptEnd2;
+				break;
+			}if(distanceP2P(ptEnd,ptStart2) < tolerance ){
+				contours[bigIndex][startidx2]=ptEnd;
+			}
+		}
+	}
+}
+
 void Hand::eliminateDefects()
 {
 	int tolerance =  boundingRectangle.height/5;
@@ -70,7 +92,7 @@ void Hand::eliminateDefects()
 		}	
 	}
 	defects[bigIndex].swap(newDefects);
-	// removeRedundantEndPoints(defects[bigIndex], m);
+	removeRedundantEndPoints(defects[bigIndex]);
 }
 
 void Hand::makeContours(Frame frame)
