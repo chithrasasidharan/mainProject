@@ -117,6 +117,7 @@ void Gesture::initFrame(Frame frame)
 			if(hasHand)
 			{
 				// TODO make hand object
+				
 			}
 		}		
 	}
