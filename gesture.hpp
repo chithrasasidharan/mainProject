@@ -23,6 +23,9 @@ class Gesture{
     float distanceP2P(Point, Point);
     // checks if it is a hand and prints accordingly
     void checkHand();
+    // Hand functions
+    void checkForOneFinger();
+    void getFingerTips();
     public:
         Frame f;
         // no of the frame where hand was read
@@ -44,6 +47,10 @@ class Gesture{
         Gesture();
         // make contours from frame
         void initFrame(Frame);
+
+        // Parts of the hand
+        vector<Point> fingerTips;
+
 };
 
 #endif

@@ -16,6 +16,53 @@ Gesture::Gesture(){
 	noOfFingers=0;
 }
 
+void Gesture::checkForOneFinger(){
+	int yTol=boundingRectangle.height/6;
+	Point highestP;
+	highestP.y=f.src.rows;
+	vector<Point>::iterator d=contours[bigIndex].begin();
+	while( d!=contours[bigIndex].end() ) {
+   	    Point v=(*d);
+		if(v.y<highestP.y){
+			highestP=v;
+			cout<<highestP.y<<endl;
+		}
+		d++;	
+	}int n=0;
+	d=hullP[bigIndex].begin();
+	while( d!=hullP[bigIndex].end() ) {
+   	    Point v=(*d);
+			cout<<"x " << v.x << " y "<<  v.y << " highestpY " << highestP.y<< "ytol "<<yTol<<endl;
+		if(v.y<highestP.y+yTol && v.y!=highestP.y && v.x!=highestP.x){
+			n++;
+		}
+		d++;	
+	}if(n==0){
+		fingerTips.push_back(highestP);
+	}
+}
+void Gesture::getFingerTips(){
+	fingerTips.clear();
+	int i=0;
+	vector<Vec4i>::iterator d=defects[bigIndex].begin();
+	while( d!=defects[bigIndex].end() ) {
+   	    Vec4i& v=(*d);
+	    int startidx=v[0]; Point ptStart(contours[bigIndex][startidx] );
+   		int endidx=v[1]; Point ptEnd(contours[bigIndex][endidx] );
+  	    int faridx=v[2]; Point ptFar(contours[bigIndex][faridx] );
+		if(i==0){
+			fingerTips.push_back(ptStart);
+			i++;
+		}
+		fingerTips.push_back(ptEnd);
+		d++;
+		i++;
+   	}
+	if(fingerTips.size()==0){
+		checkForOneFinger();
+	}
+}
+
 void Gesture::setBiggestContour()
 {
 	bigIndex = -1;
@@ -99,6 +146,7 @@ void Gesture::eliminateDefects()
 void Gesture::initFrame(Frame frame)
 {
 	f = frame;	
+	frameNo++;
 	findContours(f.contours, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
 	initVectors();
 	setBiggestContour();
@@ -117,7 +165,9 @@ void Gesture::initFrame(Frame frame)
 			if(hasHand)
 			{
 				// TODO make hand object
-				
+				// if(frameNo%handSampleRate==0){
+					getFingerTips();
+				// }
 			}
 		}		
 	}
