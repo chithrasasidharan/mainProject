@@ -15,6 +15,8 @@
 #define	fontFace FONT_HERSHEY_PLAIN
 #define	blurRadius 7
 #define nSamples 7
+// one hand is made every handSampleRate frames
+#define handSampleRate 20 
 #define windowName "src"
 #define PI 3.14159
 
