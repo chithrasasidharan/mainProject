@@ -5,6 +5,7 @@
 #include<opencv2/opencv.hpp>
 #include <vector>
 #include <string>
+#include "hand.hpp"
 #include "frame.hpp"
 
 using namespace cv;
@@ -26,6 +27,7 @@ class Gesture{
     // Hand functions
     void checkForOneFinger();
     void getFingerTips();
+    void drawFingerTips();
     public:
         Frame f;
         // no of the frame where hand was read
@@ -46,7 +48,7 @@ class Gesture{
         // constructor
         Gesture();
         // make contours from frame
-        void initFrame(Frame);
+        Hand initFrame(Frame);
 
         // Parts of the hand
         vector<Point> fingerTips;
