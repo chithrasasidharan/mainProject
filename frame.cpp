@@ -65,10 +65,12 @@ void Frame::makeThreshold(){
 }
 
 void Frame::read(){
-    cap>>src;
-    flip(src,src,1);
+    cap>>transient;
+    flip(transient,transient,1);
+    src = Mat::zeros(Size(transient.cols + transient.cols/4, transient.rows), transient.type());
+    transient.copyTo(src(Rect(0,0,transient.cols, transient.rows)));
     // Scale down
-    pyrDown(src,transient);
+    pyrDown(src(Rect(0,0,transient.cols, transient.rows)),transient);
     pyrDown(transient,transient);
     blur(transient,transient, Size(3,3));
     // change color

@@ -1,7 +1,7 @@
 #include "gesture.hpp"
 #include "main.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
-#include<opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,14 +25,14 @@ void Gesture::checkForOneFinger(){
    	    Point v=(*d);
 		if(v.y<highestP.y){
 			highestP=v;
-			cout<<highestP.y<<endl;
+			// cout<<higestP.y<<endl;
 		}
 		d++;	
 	}int n=0;
 	d=hullP[bigIndex].begin();
 	while( d!=hullP[bigIndex].end() ) {
    	    Point v=(*d);
-			cout<<"x " << v.x << " y "<<  v.y << " highestpY " << highestP.y<< "ytol "<<yTol<<endl;
+			// cout<<"x " << v.x << " y "<<  v.y << " highestpY " << highestP.y<< "ytol "<<yTol<<endl;
 		if(v.y<highestP.y+yTol && v.y!=highestP.y && v.x!=highestP.x){
 			n++;
 		}
@@ -61,6 +61,16 @@ void Gesture::getFingerTips(){
 	if(fingerTips.size()==0){
 		checkForOneFinger();
 	}
+}
+
+void Gesture::drawFingerTips(){
+	Point p;
+	int k=0;
+	for(int i=0;i<fingerTips.size();i++){
+		p=fingerTips[i];
+		putText(f.src,to_string(i+1),p-Point(0,30),fontFace, 1.2f,Scalar(200,200,200),2);
+   		circle( f.src, p, 5, Scalar(100,255,100), 4 );
+   	 }	
 }
 
 void Gesture::setBiggestContour()
@@ -143,7 +153,7 @@ void Gesture::eliminateDefects()
 }
 
 // make contours with current frame
-void Gesture::initFrame(Frame frame)
+Hand Gesture::initFrame(Frame frame)
 {
 	f = frame;	
 	frameNo++;
@@ -164,11 +174,10 @@ void Gesture::initFrame(Frame frame)
 			print();
 			if(hasHand)
 			{
-				// TODO make hand object
-				// if(frameNo%handSampleRate==0){
-					getFingerTips();
-				// }
+				getFingerTips();
+				drawFingerTips();
 			}
+			return Hand(fingerTips);
 		}		
 	}
 }
@@ -184,9 +193,9 @@ void Gesture::print()
 void Gesture::checkHandExists()
 {
 	hasHand=true;
-	/*if(fingerTips.size() > 5 ){
+	if(fingerTips.size() > 5 ){
 		hasHand=false;
-	}else*/ if(boundingRectangle.height==0 || boundingRectangle.width == 0){
+	}else if(boundingRectangle.height==0 || boundingRectangle.width == 0){
 		hasHand=false;
 	}else if(boundingRectangle.height/boundingRectangle.width > 4 || boundingRectangle.width/boundingRectangle.height >4){
 		hasHand=false;	

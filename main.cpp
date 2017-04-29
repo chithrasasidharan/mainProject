@@ -1,6 +1,7 @@
 #include <iostream>
 #include "frame.hpp"
 #include "main.hpp"
+#include "hand.hpp"
 #include "gesture.hpp"
 #include "region.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
@@ -89,7 +90,7 @@ int main()
     while(true){
         f.read();
         f.makeThreshold();
-        g.initFrame(f);
+        Hand h = g.initFrame(f);
         f.show();
     }
     return 0;
