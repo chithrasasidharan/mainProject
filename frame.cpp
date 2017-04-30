@@ -65,6 +65,7 @@ void Frame::makeThreshold(){
 }
 
 void Frame::read(){
+    // Some hocus pocus is done to shift the transient and bw screens to added black area to the right
     cap>>transient;
     flip(transient,transient,1);
     src = Mat::zeros(Size(transient.cols + transient.cols/4, transient.rows), transient.type());

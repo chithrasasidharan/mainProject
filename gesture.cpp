@@ -177,6 +177,11 @@ Hand Gesture::initFrame(Frame frame)
 				getFingerTips();
 				drawFingerTips();
 			}
+
+
+			//  Draw the contour
+			drawContours(f.src,hullP,bigIndex,cv::Scalar(200,0,0),2, 8, vector<Vec4i>(), 0, Point());
+
 			return Hand(fingerTips);
 		}		
 	}
