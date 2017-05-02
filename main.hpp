@@ -16,7 +16,7 @@
 #define	blurRadius 7
 #define nSamples 7
 // one hand is made every handSampleRate frames
-#define handSampleRate 20
+#define handSampleRate 1
 //  one command is identified from commandRate hands
 #define commandRate 20
 #define windowName "src"
