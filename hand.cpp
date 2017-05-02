@@ -15,3 +15,16 @@ Hand::Hand(vector<Point> aFingerTips){
     fingerTips = aFingerTips;
     noOfFingers = fingerTips.size();
 }
+
+void Hand::print(){
+    cout<<fingerTips.size()<<" : ";
+    for(int i=0;i<fingerTips.size();++i)
+    {
+        cout<<fingerTips[i].x<<" "<<fingerTips[i].y<<", ";
+    }
+    cout<<endl;
+}
+
+bool Hand::valid(){
+    return fingerTips.size()>0;
+}

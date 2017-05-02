@@ -14,6 +14,9 @@ class Hand
 
         Hand();
         Hand(vector<Point>);
+
+        void print();
+        bool valid();
 };
 
 #endif

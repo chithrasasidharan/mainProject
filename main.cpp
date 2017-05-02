@@ -69,9 +69,9 @@ void takeAverage(vector<Region> regions)
             regions[j].getAverage(f.src, f.average[j]);
             regions[j].draw(f.src);
             // Testing cout output to see if average works
-            cout<<f.average[j][0]<<" "<<f.average[j][1]<<" "<<f.average[j][2]<<" "<<endl;
+            // cout<<f.average[j][0]<<" "<<f.average[j][1]<<" "<<f.average[j][2]<<" "<<endl;
         }
-        cout<<endl;
+        // cout<<endl;
         cvtColor(f.src, f.src, colorToOriginal);
 		string imgText = string("Finding average color of hand");
 		printText(f.src,imgText);	
@@ -87,10 +87,30 @@ int main()
     initWindows(f);
     waitForPalmCover(regions);
     takeAverage(regions);
+    vector<Hand> h;
+    Hand temp;
+    int now=0;
     while(true){
         f.read();
         f.makeThreshold();
-        Hand h = g.initFrame(f);
+        temp = g.initFrame(f);
+        if(temp.valid())
+        {
+            h.push_back(temp);
+            now = (now+1)%commandRate;
+            if(!now)
+            {
+                // identify command
+                for(int i=0;i<commandRate;++i)
+                {
+                    h[i].print();
+                }
+                cout<<endl;
+
+                // clear for next round
+                h.clear();
+            }
+        }
         f.show();
     }
     return 0;
