@@ -1,4 +1,4 @@
 all:
-	# g++ -o gesture main.cpp  `pkg-config --cflags --libs opencv` -std=c++11
-	g++ -o gesture handDetection.cpp  `pkg-config --cflags --libs opencv` -std=c++11
-
+	g++ -o gesture main.cpp  `pkg-config --cflags --libs opencv`
+command:
+	g++ -ggdb `pkg-config --cflags opencv libvlc` command.cpp -o run `pkg-config --libs opencv libvlc`;
