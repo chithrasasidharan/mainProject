@@ -87,7 +87,7 @@ int main()
     initWindows(f);
     waitForPalmCover(regions);
     takeAverage(regions);
-    vector<Hand> h;
+    vector<Hand> h(commandRate);
     Hand temp;
     int now=0;
     while(true){
