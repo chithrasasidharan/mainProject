@@ -1,6 +1,7 @@
 #include <iostream>
 #include "frame.hpp"
 #include "main.hpp"
+#include "command.hpp"
 #include "hand.hpp"
 #include "gesture.hpp"
 #include "region.hpp"
@@ -89,6 +90,7 @@ int main()
     takeAverage(regions);
     vector<Hand> h(commandRate);
     Hand temp;
+    Command com;
     int now=0;
     while(true){
         f.read();
@@ -106,6 +108,11 @@ int main()
                     h[i].print();
                 }
                 cout<<endl;
+                int command = com.recogniseCommand(h);
+                if(command>-1)
+                {
+                    com.doCommand(command);
+                }
 
                 // clear for next round
                 h.clear();
