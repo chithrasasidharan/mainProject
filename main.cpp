@@ -34,15 +34,14 @@ void printText(Mat src, string text){
 
 void initWindows(Frame f){
 
-    namedWindow("trackbars",CV_WINDOW_KEEPRATIO);
     namedWindow(windowName,CV_WINDOW_FULLSCREEN);
 
-	// createTrackbar("lower1","trackbars",&f.lower[0],255);
-	// createTrackbar("upper1","trackbars",&f.upper[0],255);
-	// createTrackbar("lower2","trackbars",&f.lower[1],255);
-	// createTrackbar("upper2","trackbars",&f.upper[1],255);
-	// createTrackbar("lower3","trackbars",&f.lower[2],255);
-	// createTrackbar("upper3","trackbars",&f.upper[2],255);
+	// createTrackbar("lower1",windowName,&f.lower[0],255);
+	// createTrackbar("upper1",windowName,&f.upper[0],255);
+	// createTrackbar("lower2",windowName,&f.lower[1],255);
+	// createTrackbar("upper2",windowName,&f.upper[1],255);
+	// createTrackbar("lower3",windowName,&f.lower[2],255);
+	// createTrackbar("upper3",windowName,&f.upper[2],255);
 }
 
 void waitForPalmCover(vector<Region> regions){
@@ -92,6 +91,7 @@ int main()
     Hand temp;
     Command com;
     int now=0;
+    int noC=2;
     while(true){
         f.read();
         f.makeThreshold();
@@ -100,8 +100,10 @@ int main()
         {
             h.push_back(temp);
             now = (now+1)%commandRate;
-            if(!now)
+            if(!now && noC--)
             {
+                if(noC<0)
+                    exit(0);
                 // identify command
                 for(int i=0;i<commandRate;++i)
                 {
@@ -109,6 +111,7 @@ int main()
                 }
                 cout<<endl;
                 int command = com.recogniseCommand(h);
+                cout<<"command : "<<command<<endl;
                 if(command>-1)
                 {
                     com.doCommand(command);

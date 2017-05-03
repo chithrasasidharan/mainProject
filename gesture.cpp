@@ -156,11 +156,11 @@ void Gesture::eliminateDefects()
 
 void Gesture::findCentroid()
 {
-	// if(contours[bigIndex].size()>2){
-		double area=0;
-		Point p;
-		Point p0=contours[bigIndex][0];
-		double a;
+	if(contours[bigIndex].size()>2){
+		area=0;
+		p.x=0;
+		p.y=0;
+		p0=contours[bigIndex][0];
 		for(int j=0; j<contours[bigIndex].size(); j++){
 			a=p0.x*contours[bigIndex][j].y-p0.y*contours[bigIndex][j].x;
 			p+=(p0+contours[bigIndex][j])*a;
@@ -172,9 +172,8 @@ void Gesture::findCentroid()
 		}
 		if(area!=0){
 			centroid = p*(1/(3*area));
-			cout<<"centroid"<<centroid.x<<" "<<centroid.y<<endl;
 		}
-	// }
+	}
 }
 
 // make contours with current frame

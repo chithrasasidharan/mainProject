@@ -20,6 +20,7 @@
 //  one command is identified from commandRate hands
 #define commandRate 20
 #define windowName "src"
+#define fileName "poo.mp4"
 #define PI 3.14159
 
 // Variables for tuning
