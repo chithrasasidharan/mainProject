@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "command.hpp"
+#include "main.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui_c.h>
 #include <opencv2/opencv.hpp>
@@ -12,7 +13,12 @@
 using namespace std;
 using namespace cv;
 
+	
 Command::Command(){
+	instance = libvlc_new(0, NULL);
+	media = libvlc_media_new_path(instance, fileName);	
+	mplayer = libvlc_media_player_new_from_media(media);
+	libvlc_media_release(media);
 	help.push_back("thumbs up: play");
 	help.push_back("thumbs down: pause");
 	help.push_back("full hand: stop");
@@ -82,5 +88,15 @@ int Command::doCommand(int i=-1){
 
 int Command::recogniseCommand(vector<Hand> hands)
 {
-	
+	for(int i=0; i<hands.size()-1;++i){
+		difference.push_back(hands[i+1].centroid.x-hands[i].centroid.x);
+	}
+	int p;
+	for(int i=0; i<difference.size();i++){
+		p+=difference[i];
+	}
+	if(p>0)
+		return 1;
+
+	return -1;
 }
