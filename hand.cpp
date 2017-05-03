@@ -11,9 +11,10 @@ using namespace cv;
 
 Hand::Hand(){}
 
-Hand::Hand(vector<Point> aFingerTips){
+Hand::Hand(vector<Point> aFingerTips, Point aCentroid){
     fingerTips = aFingerTips;
     noOfFingers = fingerTips.size();
+    centroid = aCentroid;
 }
 
 void Hand::print(){

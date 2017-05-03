@@ -152,6 +152,12 @@ void Gesture::eliminateDefects()
 	removeRedundantEndPoints(defects[bigIndex]);
 }
 
+Point Gesture::findCentroid()
+{
+	Point c;
+	return c;
+}
+
 // make contours with current frame
 Hand Gesture::initFrame(Frame frame)
 {
@@ -176,13 +182,14 @@ Hand Gesture::initFrame(Frame frame)
 			{
 				getFingerTips();
 				drawFingerTips();
+				centroid = findCentroid();
 			}
 
 
 			//  Draw the contour
 			drawContours(f.src,hullP,bigIndex,cv::Scalar(200,0,0),2, 8, vector<Vec4i>(), 0, Point());
 
-			return Hand(fingerTips);
+			return Hand(fingerTips, centroid);
 		}		
 	}
 }

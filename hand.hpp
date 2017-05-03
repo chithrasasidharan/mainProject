@@ -10,10 +10,11 @@ class Hand
 {
     public:
         vector<Point> fingerTips;
+        Point centroid;
         int noOfFingers;
 
         Hand();
-        Hand(vector<Point>);
+        Hand(vector<Point>, Point centroid);
 
         void print();
         bool valid();
