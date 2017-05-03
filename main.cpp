@@ -91,7 +91,6 @@ int main()
     Hand temp;
     Command com;
     int now=0;
-    int noC=2;
     while(true){
         f.read();
         f.makeThreshold();
@@ -100,10 +99,9 @@ int main()
         {
             h.push_back(temp);
             now = (now+1)%commandRate;
-            if(!now && noC--)
+            if(!now )
             {
-                if(noC<0)
-                    exit(0);
+               
                 // identify command
                 for(int i=0;i<commandRate;++i)
                 {
