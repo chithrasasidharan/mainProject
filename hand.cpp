@@ -22,7 +22,9 @@ void Hand::print(){
     for(int i=0;i<fingerTips.size();++i)
     {
         cout<<fingerTips[i].x<<" "<<fingerTips[i].y<<", ";
+
     }
+    cout<<"Centroid: "<<centroid.x<<" "<<centroid.y;
     cout<<endl;
 }
 

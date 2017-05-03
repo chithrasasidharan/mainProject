@@ -3,7 +3,7 @@
 #include <opencv2/highgui/highgui_c.h>
 #include <opencv2/opencv.hpp>
 #include <vector>
-#include <hand.hpp>
+#include "hand.hpp"
 #include <vlc/vlc.h>
 #include "opencv2/objdetect/objdetect.hpp"
 

@@ -1,7 +1,7 @@
 //vlc link https://www.videolan.org/developers/vlc/doc/doxygen/html/group__libvlc__video.html
 
 #include <iostream>
-#include <command.hpp>
+#include "command.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui_c.h>
 #include <opencv2/opencv.hpp>

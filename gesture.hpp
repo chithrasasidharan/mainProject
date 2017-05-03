@@ -28,7 +28,7 @@ class Gesture{
     void checkForOneFinger();
     void getFingerTips();
     void drawFingerTips();
-    Point findCentroid();
+    void findCentroid();
     public:
         Frame f;
         // no of the frame where hand was read
