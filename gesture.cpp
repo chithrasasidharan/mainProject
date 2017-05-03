@@ -71,6 +71,8 @@ void Gesture::drawFingerTips(){
 		putText(f.src,to_string(i+1),p-Point(0,30),fontFace, 1.2f,Scalar(200,200,200),2);
    		circle( f.src, p, 5, Scalar(100,255,100), 4 );
    	 }	
+
+   	circle( f.src, centroid, 5, Scalar(255,100,100), 4 );
 }
 
 void Gesture::setBiggestContour()
@@ -152,10 +154,27 @@ void Gesture::eliminateDefects()
 	removeRedundantEndPoints(defects[bigIndex]);
 }
 
-Point Gesture::findCentroid()
+void Gesture::findCentroid()
 {
-	Point c;
-	return c;
+	// if(contours[bigIndex].size()>2){
+		double area=0;
+		Point p;
+		Point p0=contours[bigIndex][0];
+		double a;
+		for(int j=0; j<contours[bigIndex].size(); j++){
+			a=p0.x*contours[bigIndex][j].y-p0.y*contours[bigIndex][j].x;
+			p+=(p0+contours[bigIndex][j])*a;
+			// p.x+=(p0.x+contours[bigIndex][j].x)*a;
+			// p.y+=(p0.y+contours[bigIndex][j].y)*a;
+			// cout<<"Point p: "<<p.x<<" "<<p.y<<endl;
+			area+=a;
+			p0=contours[bigIndex][j];
+		}
+		if(area!=0){
+			centroid = p*(1/(3*area));
+			cout<<"centroid"<<centroid.x<<" "<<centroid.y<<endl;
+		}
+	// }
 }
 
 // make contours with current frame
@@ -181,8 +200,8 @@ Hand Gesture::initFrame(Frame frame)
 			if(hasHand)
 			{
 				getFingerTips();
+				findCentroid();
 				drawFingerTips();
-				centroid = findCentroid();
 			}
 
 
