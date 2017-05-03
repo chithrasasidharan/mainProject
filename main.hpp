@@ -27,5 +27,9 @@
 #define waitForCoverIterations 50
 #define averageIterations 30
 
+#define frameWidth 640
+#define frameHeight 480
+// do operation when width/divideby or height/divideby
+#define divideBy 5
 
 #endif

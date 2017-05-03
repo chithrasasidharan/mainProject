@@ -18,6 +18,7 @@ Command::Command(){
 	instance = libvlc_new(0, NULL);
 	media = libvlc_media_new_path(instance, fileName);	
 	mplayer = libvlc_media_player_new_from_media(media);
+	capture.open(-1);
 	libvlc_media_release(media);
 	help.push_back("thumbs up: play");
 	help.push_back("thumbs down: pause");
@@ -67,6 +68,7 @@ int Command::getCommand(int i=-1){
 		cout<<i<<": "<<help[i-1]<<endl;
 }
 int Command::doCommand(int i=-1){
+	capture.read(frame);
 	if(i==-1||i==1){
 		play();
 	}
@@ -88,15 +90,15 @@ int Command::doCommand(int i=-1){
 
 int Command::recogniseCommand(vector<Hand> hands)
 {
+	int p=0;
 	for(int i=0; i<hands.size()-1;++i){
-		difference.push_back(hands[i+1].centroid.x-hands[i].centroid.x);
+		p+=hands[i+1].centroid.x-hands[i].centroid.x;
 	}
-	int p;
-	for(int i=0; i<difference.size();i++){
-		p+=difference[i];
-	}
-	if(p>0)
+	cout<<"difference : "<<p<<endl;
+	if(p>frameWidth/divideBy)
 		return 1;
+	if(p<-frameWidth/divideBy)
+		return 3;
 
 	return -1;
 }
