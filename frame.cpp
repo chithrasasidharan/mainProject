@@ -59,9 +59,9 @@ void Frame::makeThreshold(){
 	}
     thresholdExists=true;
     threshold.copyTo(contours);
-    pyrUp(contours, contours);
-    pyrUp(contours, contours);
 	medianBlur(threshold, threshold,blurRadius); 
+    pyrUp(contours, contours);
+    pyrUp(contours, contours);
 }
 
 void Frame::read(){
