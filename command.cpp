@@ -99,12 +99,16 @@ int Command::recogniseCommand(vector<Hand> hands)
 		return 1;
 	if(p<-frameWidth/divideBy)
 		return 3;
-	int q=0;
-	for(int i=0; i<hands.size()-1; ++i)
-		q+=hands[i+1].centroid.y-hands[i].centroid.y;
-	if(q>frameHeight/divideBy)
+	int r=0;
+	for(int i=0; i<hands.size()-1;++i){
+		r+=hands[i+1].fingerTips[0].x-hands[i].fingerTips[0].x;
+	}
+	if(r<-frameWidth/divideBy)
 		return 4;
-	if(q<-frameHeight/divideBy)
-		return 7;
-	return -1;
+	int s=0;
+	for(int i=0; i<hands.size()-1;++i){
+		s+=hands[i+1].fingerTips[0].x-hands[i].fingerTips[0].x;
+	}
+	if(s<-frameWidth/divideBy)
+		return 2;
 }
