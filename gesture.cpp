@@ -189,7 +189,7 @@ Hand Gesture::initFrame(Frame frame)
 		boundingRectangle = boundingRect(Mat(handContour)); 
 		convexHull(Mat(handContour),hullP[bigIndex],false,true);
 		convexHull(Mat(handContour),hullI[bigIndex],false,false);
-		approxPolyDP( Mat(hullP[bigIndex]), hullP[bigIndex], 18, true );
+		// approxPolyDP( Mat(hullP[bigIndex]), hullP[bigIndex], 18, true );
 		if(handContour.size()>3 ){
 			convexityDefects(handContour,hullI[bigIndex],defects[bigIndex]);
 			eliminateDefects();
