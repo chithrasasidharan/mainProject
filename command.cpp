@@ -96,37 +96,40 @@ int Command::recogniseCommand(vector<Hand> hands)
 	}
 	cout<<"difference : "<<p<<endl;
 	if(p>frameWidth/divideBy)
-		return 1;
+		return 4;
 	if(p<-frameWidth/divideBy)
+		return 2;
+	int tx=0;
+	int ty=0;
+	for(int i=0; i<hands.size()-1;++i){
+		int xi=0,yi=0,xinext=0,yinext=0;
+		for(int j=0;j<hands[i].fingerTips.size();++j){
+			xi+=hands[i].fingerTips[j].x;
+			yi+=hands[i].fingerTips[j].y;
+		}
+		for(int j=0;j<hands[i+1].fingerTips.size();++j){
+			xinext+=hands[i+1].fingerTips[j].x;
+			yinext+=hands[i+1].fingerTips[j].y;
+		}
+		xi/=hands[i].fingerTips.size();
+		yi/=hands[i].fingerTips.size();
+		xinext/=hands[i].fingerTips.size();
+		yinext/=hands[i].fingerTips.size();
+		tx+=xinext - xi;
+		ty+=yinext - yi;
+	}
+	cout<<tx<<" "<<ty<<endl;
+	if(tx>frameWidth/divideBy && ty>frameHeight/divideBy)
+		return 1;
+	if(tx<-frameWidth/divideBy && ty>frameHeight/divideBy)
 		return 3;
-	// int tx=0;
-	// int ty=0;
-	// for(int i=0; i<hands.size()-1;++i){
-	// 	int xi=0,yi=0,xinext=0,yinext=0;
-	// 	for(int j=0;j<hands[i].fingerTips.size();++j){
-	// 		xi+=hands[i].fingerTips[j].x;
-	// 		yi+=hands[i].fingerTips[j].y;
-	// 	}
-	// 	for(int j=0;j<hands[i+1].fingerTips.size();++j){
-	// 		xinext+=hands[i+1].fingerTips[j].x;
-	// 		yinext+=hands[i+1].fingerTips[j].y;
-	// 	}
-	// 	xi/=hands[i].fingerTips.size();
-	// 	yi/=hands[i].fingerTips.size();
-	// 	xinext/=hands[i].fingerTips.size();
-	// 	yinext/=hands[i].fingerTips.size();
-	// 	tx+=xinext - xi;
-	// 	ty+=yinext - yi;
-	// }
-	// cout<<tx<<" "<<ty<<endl;
-	// if(tx>frameWidth/divideBy && ty>frameHeight/divideBy)
-	// 	return 4;
 	int s=0;
 	for(int i=0; i<hands.size()-1;++i){
-		s+=hands[i+1].fingerTips[0].x-hands[i].fingerTips[0].x;
+		s+=hands[i+1].fingerTips[0].y-hands[i].fingerTips[0].y;
 	}
-	if(s<-frameWidth/divideBy)
-		return 2;
-	if(s>frameWidth/divideBy)
-		return 4;
+	if(s<-frameHeight/divideBy)
+		return 6;
+	if(s>frameHeight/divideBy)
+		return 7;
+	return -1;
 }
