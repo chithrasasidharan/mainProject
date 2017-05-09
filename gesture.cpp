@@ -201,6 +201,8 @@ Hand Gesture::initFrame(Frame frame)
 				getFingerTips();
 				findCentroid();
 				drawFingerTips();
+			}else{
+				fingerTips.clear();
 			}
 
 

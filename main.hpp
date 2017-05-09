@@ -29,6 +29,9 @@
 
 #define frameWidth 640
 #define frameHeight 480
+
+#define cutX 200
+#define cutY 100
 // do operation when width/divideby or height/divideby
 #define divideBy 5
 
