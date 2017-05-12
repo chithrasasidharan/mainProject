@@ -1,0 +1,27 @@
+\select@language {english}
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}
+\contentsline {subsection}{\numberline {1.1}Motivation and Overview}{1}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Background and Literature Survey}{1}{subsection.1.2}
+\contentsline {section}{\numberline {2}Materials and Methodology}{2}{section.2}
+\contentsline {subsection}{\numberline {2.1}Algorithms}{2}{subsection.2.1}
+\contentsline {subsubsection}{\numberline {2.1.1}Skin detection algorithm}{2}{subsubsection.2.1.1}
+\contentsline {subsection}{\numberline {2.2}Program Development}{2}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Filtering}{2}{subsubsection.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.2}Contours and fingertip detection}{3}{subsubsection.2.2.2}
+\contentsline {subsubsection}{\numberline {2.2.3}Gesture recognition and command execution}{3}{subsubsection.2.2.3}
+\contentsline {subsection}{\numberline {2.3}System Description}{3}{subsection.2.3}
+\contentsline {subsubsection}{\numberline {2.3.1}Class Diagram}{4}{subsubsection.2.3.1}
+\contentsline {subsubsection}{\numberline {2.3.2}Code Overview}{5}{subsubsection.2.3.2}
+\contentsline {paragraph}{Class frame:\\}{5}{section*.4}
+\contentsline {paragraph}{Variables:\\}{6}{section*.5}
+\contentsline {paragraph}{Functions:\\}{6}{section*.6}
+\contentsline {paragraph}{Class region:\\}{6}{section*.7}
+\contentsline {paragraph}{Variables:\\}{6}{section*.8}
+\contentsline {paragraph}{Major Functions:\\\\}{7}{section*.9}
+\contentsline {paragraph}{Class gesture:\\}{7}{section*.10}
+\contentsline {paragraph}{Class Hand:\\}{8}{section*.11}
+\contentsline {paragraph}{Class Command: \\}{8}{section*.12}
+\contentsline {section}{\numberline {3}Results and Discussions}{9}{section.3}
+\contentsline {subsection}{\numberline {3.1}Screenshots}{9}{subsection.3.1}
+\contentsline {section}{\numberline {4}Further Work}{10}{section.4}
+\contentsline {section}{\numberline {5}Conclusion}{11}{section.5}
